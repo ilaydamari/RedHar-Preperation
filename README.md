@@ -63,35 +63,33 @@
 המודעות למשרה מגדירה בצורה כמעט ישירה את רשימת הנושאים שראיון “אוהב” לשאול: כתיבת בדיקות ב‑Go (עדיפות ל‑Ginkgo), ניטור כשלי בדיקות ו‑flakiness, כיסוי קוד ותיעוד, הקשחת CI/CD, כתיבת כלי דיבאגינג פנימיים, ניטור מערכות בקנה מידה, עבודה עם Linux, Kubernetes, IaC (Terraform), observability (Prometheus/Grafana), Tekton ו‑ArgoCD, Multi‑arch builds, ושימוש ביקורתי ב‑LLM (“ההפך מ‑vibe coding”). 
 
 כדי לייצר “סיפור מקצועי עקבי”, תשתמש בשפה של הדומיין:
-- **Konflux** הוא “software factory” Cloud‑native שממוקד ב‑software supply‑chain security, hermetic builds, SBOM, provenance, integration tests ותוצאות שמחוברות ל‑SCM.   
-- Konflux נשען על Tekton להרצת pipelines בקלאסטר, ויודע להיטען מאירועי Git (PR/push) ולדווח חזרה ל‑SCM (כולל שילוב עם  ו‑).   
+- ה-**Konflux** הוא “software factory” Cloud‑native שממוקד ב‑software supply‑chain security, hermetic builds, SBOM, provenance, integration tests ותוצאות שמחוברות ל‑SCM.   
+- ה-Konflux נשען על Tekton להרצת pipelines בקלאסטר, ויודע להיטען מאירועי Git (PR/push) ולדווח חזרה ל‑SCM (כולל שילוב עם  ו‑).   
 - במודל הארכיטקטורה של Konflux יש אובייקטים כמו Application/Component/Snapshot/IntegrationTestScenario/ReleasePlan/Release (זה “מילון המושגים” שלך לשיחה מערכתית).   
 - ציר “supply chain compliance”: Konflux מוסיף כברירת מחדל את Conforma כ‑integration test; Conforma בודק policy/compliance על בסיס attestation של build provenance שנחתם (in‑toto) באמצעות Tekton Chains.   
-- Tekton הוא הרחבה ל‑Kubernetes שמביאה CRDs (Task/Pipeline/PipelineRun וכו’) ומריצה כל Task כ‑Pod בקלאסטר.   
-- GitOps עם Argo CD: Git הוא “source of truth” למצב הרצוי, ו‑Argo CD דואג לסנכרון עם מצב הקלאסטר.   
-- Observability: Prometheus (scraping, jobs/instances, PromQL, alerting rules) + Grafana (alert rules).   
-- Multi‑arch: Docker buildx עם `--platform` (amd64/arm64), ושלוש אסטרטגיות נפוצות (QEMU emulation / multi‑node builder / cross‑compilation); ב‑Go – ההבחנה ש‑GOOS/GOARCH הם היעד, כלומר בפועל “תמיד cross‑compiling”.   
-- Go testing: `testing` package + `go test`; טכניקת table‑driven tests; ובדיקות BDD עם Ginkgo שבנוי על Go testing ומודגש במשרה.   
-- Kubernetes debugging במתודולוגיה מסודרת (איסוף מידע, describe/logs, ניטור ולוגינג) הוא “חומר ראיון” קלאסי לתפקיד כזה.   
-- Terraform refresh: הבנת state ולמה הוא קיים + best practices/style.   
+- ה-Tekton הוא הרחבה ל‑Kubernetes שמביאה CRDs (Task/Pipeline/PipelineRun וכו’) ומריצה כל Task כ‑Pod בקלאסטר.   
+- ה-GitOps עם Argo CD: Git הוא “source of truth” למצב הרצוי, ו‑Argo CD דואג לסנכרון עם מצב הקלאסטר.   
+- ה-Observability: Prometheus (scraping, jobs/instances, PromQL, alerting rules) + Grafana (alert rules).   
+- ה-Multi‑arch: Docker buildx עם `--platform` (amd64/arm64), ושלוש אסטרטגיות נפוצות (QEMU emulation / multi‑node builder / cross‑compilation); ב‑Go – ההבחנה ש‑GOOS/GOARCH הם היעד, כלומר בפועל “תמיד cross‑compiling”.   
+- ה-Go testing: `testing` package + `go test`; טכניקת table‑driven tests; ובדיקות BDD עם Ginkgo שבנוי על Go testing ומודגש במשרה.   
+- ה-Kubernetes debugging במתודולוגיה מסודרת (איסוף מידע, describe/logs, ניטור ולוגינג) הוא “חומר ראיון” קלאסי לתפקיד כזה.   
+- ה-Terraform refresh: הבנת state ולמה הוא קיים + best practices/style.   
 
 ### תרשים זרימה שמאחד את נקודות הראיון למודל אחד
-```mermaid
 flowchart LR
-  Dev[Developer PR/Push] --> SCM[SCM: GitHub/GitLab]
-  SCM -->|Git event triggers| Konflux[Konflux CI/CD]
-  Konflux --> Tekton[Tekton Pipelines on Kubernetes]
-  Tekton --> TR[TaskRuns/Pods execute tests/build]
-  TR --> Artifacts[OCI Images/Artifacts + SBOM]
-  Tekton --> Chains[Tekton Chains signs attestations]
-  Chains --> Prov[Signed provenance (in-toto/SLSA)]
-  Konflux --> Conforma[Conforma policy/compliance check]
-  Conforma -->|pass| Release[Release/Promotion]
-  Release --> GitOps[GitOps: Argo CD sync]
-  GitOps --> Cluster[Kubernetes clusters/providers]
-  Cluster --> Obs[Observability: Prometheus/Grafana]
-  Obs --> Alerts[Alerts + incident triage]
-```
+    Dev["Developer PR or Push"] --> SCM["SCM - GitHub or GitLab"]
+    SCM --> Konflux["Konflux CI and CD"]
+    Konflux --> Tekton["Tekton Pipelines on Kubernetes"]
+    Tekton --> TR["TaskRuns and Pods execute build and tests"]
+    TR --> Artifacts["OCI Images, Artifacts, and SBOM"]
+    Tekton --> Chains["Tekton Chains signs attestations"]
+    Chains --> Prov["Signed Provenance - in-toto and SLSA"]
+    Konflux --> Conforma["Conforma Policy and Compliance Check"]
+    Conforma --> Release["Release and Promotion"]
+    Release --> GitOps["GitOps with Argo CD"]
+    GitOps --> Cluster["Kubernetes Clusters and Providers"]
+    Cluster --> Obs["Observability with Prometheus and Grafana"]
+    Obs --> Alerts["Alerts and Incident Triage"]
 
 ### טבלת מיקוד: מה לתרגל כדי “לפגוע” במה שהצוות מחפש
 | ציר | למה זה קריטי לתפקיד | תוצר/אינדיקציה שתהיה מוכן | מקורות מועדפים |
