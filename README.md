@@ -76,20 +76,38 @@
 - ה-Terraform refresh: הבנת state ולמה הוא קיים + best practices/style.   
 
 ### תרשים זרימה שמאחד את נקודות הראיון למודל אחד
+```mermaid
+%%{init: {'theme':'default'}}%%
 flowchart LR
-    Dev["Developer PR or Push"] --> SCM["SCM - GitHub or GitLab"]
-    SCM --> Konflux["Konflux CI and CD"]
-    Konflux --> Tekton["Tekton Pipelines on Kubernetes"]
-    Tekton --> TR["TaskRuns and Pods execute build and tests"]
-    TR --> Artifacts["OCI Images, Artifacts, and SBOM"]
-    Tekton --> Chains["Tekton Chains signs attestations"]
-    Chains --> Prov["Signed Provenance - in-toto and SLSA"]
-    Konflux --> Conforma["Conforma Policy and Compliance Check"]
-    Conforma --> Release["Release and Promotion"]
-    Release --> GitOps["GitOps with Argo CD"]
-    GitOps --> Cluster["Kubernetes Clusters and Providers"]
-    Cluster --> Obs["Observability with Prometheus and Grafana"]
-    Obs --> Alerts["Alerts and Incident Triage"]
+    Dev["Developer PR / Push"]
+    SCM["SCM (GitHub / GitLab)"]
+    Konflux["Konflux CI/CD"]
+    Tekton["Tekton Pipelines on Kubernetes"]
+    TR["TaskRuns / Pods run build and tests"]
+    Artifacts["OCI Images + SBOM"]
+    Chains["Tekton Chains"]
+    Prov["Signed Provenance (SLSA / in-toto)"]
+    Conforma["Conforma Policy Check"]
+    Release["Release / Promotion"]
+    GitOps["ArgoCD GitOps Sync"]
+    Cluster["Kubernetes Clusters"]
+    Obs["Prometheus / Grafana"]
+    Alerts["Alerts + Incident Response"]
+
+    Dev --> SCM
+    SCM --> Konflux
+    Konflux --> Tekton
+    Tekton --> TR
+    TR --> Artifacts
+    Tekton --> Chains
+    Chains --> Prov
+    Konflux --> Conforma
+    Conforma --> Release
+    Release --> GitOps
+    GitOps --> Cluster
+    Cluster --> Obs
+    Obs --> Alerts
+```
 
 ### טבלת מיקוד: מה לתרגל כדי “לפגוע” במה שהצוות מחפש
 | ציר | למה זה קריטי לתפקיד | תוצר/אינדיקציה שתהיה מוכן | מקורות מועדפים |
@@ -134,29 +152,29 @@ flowchart LR
 
 **12:15–13:00** – הפסקת צהריים
 
-**13:00–14:15** – Tekton Fundamentals (75 דק׳)  
-- Tekton כ‑Kubernetes extension עם CRDs; מה ההבדל בין Task / TaskRun / Pipeline / PipelineRun.   
+ב**13:00–14:15** – Tekton Fundamentals (75 דק׳)  
+- ה-Tekton כ‑Kubernetes extension עם CRDs; מה ההבדל בין Task / TaskRun / Pipeline / PipelineRun.   
 - להבין ש‑Task רץ כ‑Pod בקלאסטר.   
 - להבין ש‑PipelineRun יוצר TaskRuns אוטומטית ומכיל Status שניתן לנטר.   
 משימה פרקטית: כתוב 3 קבצי YAML (גם אם לא תריץ אותם) – Task, Pipeline, PipelineRun (דוגמאות קצרות נמצאות בהמשך ב‑Cheat Sheets).
 
 **14:15–14:30** – הפסקה
 
-**14:30–15:20** – Supply Chain: Conforma + Tekton Chains (50 דק׳)  
+ב-**14:30–15:20** – Supply Chain: Conforma + Tekton Chains (50 דק׳)  
 - להבין ש‑Conforma הוא verifier/policy checker ושב‑Konflux הוא נוסף כברירת מחדל כ‑integration test; והוא בודק provenance/אינטגריטי על בסיס attestation שנחתם ע״י Tekton Chains.   
 תוצר: תשובת ראיון של 90 שניות: “מה זה provenance, למה חותמים, ואיך policy check מתחבר ל‑CI”.
 
-**15:20–16:00** – GitOps + Argo CD (40 דק׳)  
+ב-**15:20–16:00** – GitOps + Argo CD (40 דק׳)  
 - להבין ולהסביר: Argo CD עובד לפי GitOps ושומר Git כ‑source of truth למצב הרצוי.   
 תוצר: 5 משפטים שאתה אומר בראיון על drift + reconciliation.
 
 **16:00–16:15** – הפסקה
 
-**16:15–17:15** – LeetCode Medium #1: Group Anagrams (60 דק׳)   
+ב-**16:15–17:15** – LeetCode Medium #1: Group Anagrams (60 דק׳)   
 מטרה: HashMap pattern + הסבר בקול.  
 תוצר: פתרון ב‑Go + 2 דקות הסבר.
 
-**17:15–18:15** – LeetCode Medium #2: Top K Frequent Elements (60 דק׳)   
+ב-**17:15–18:15** – LeetCode Medium #2: Top K Frequent Elements (60 דק׳)   
 מטרה: תרגול map+heap/bucket + דיון סיבוכיות.
 
 **18:15–18:40** – “אימון וורבאליות” (25 דק׳)  
@@ -167,46 +185,46 @@ flowchart LR
 **20:00–20:15** – חימום  
 - פתח את ה‑One‑Pager ותעבור על 10 המושגים של Konflux/Tekton.
 
-**20:15–21:05** – Go testing fundamentals (50 דק׳)  
-- `testing` package: טסטים הם `TestXxx(*testing.T)` ו‑`go test` מריץ פונקציות `Test*` בקבצי `_test.go`.   
-- Table‑driven tests: דפוס עבודה מקובל ב‑Go.   
+ב-**20:15–21:05** – Go testing fundamentals (50 דק׳)  
+- ב-`testing` package: טסטים הם `TestXxx(*testing.T)` ו‑`go test` מריץ פונקציות `Test*` בקבצי `_test.go`.   
+- ב-Table‑driven tests: דפוס עבודה מקובל ב‑Go.   
 משימה: כתוב 2 פונקציות (פשוטות) + טסט table‑driven עבורן (דוגמה בהמשך).
 
 **21:05–21:15** – הפסקה
 
-**21:15–22:10** – Ginkgo (55 דק׳)  
+ב-**21:15–22:10** – Ginkgo (55 דק׳)  
 - להבין ש‑Ginkgo הוא framework “expressive specs” שיושב על Go testing, עם Gomega ל‑matchers.   
 משימה: כתוב Spec אחד מינימלי + הרץ (גם בפרויקט toy).  
 תוצר: אתה מסוגל להסביר למראיין מתי היית מעדיף Ginkgo (BDD, organization) ומתי “testing” vanilla.
 
 **22:10–22:20** – הפסקה
 
-**22:20–23:00** – Playbook Flaky Tests + LeetCode קצר  
+ב-**22:20–23:00** – Playbook Flaky Tests + LeetCode קצר  
 - בניית תשובת ראיון: “איך מזהים flakiness?” (trend, correlation, retries, isolation) – זה כתוב מפורש במשרה.   
 - צעד פרקטי: להריץ טסטים מספר פעמים כדי לחשוף flakiness (למשל `go test -count N` כדי להריץ יותר מפעם).   
 - להכיר שימוש ב‑race detector בזמן בדיקות כשיש concurrency (זה נשמע מצוין בראיון, במיוחד למערכות pipelines).   
-**LeetCode Medium (30–35 דק׳):** Longest Substring Without Repeating Characters   
+ב-**LeetCode Medium (30–35 דק׳):** Longest Substring Without Repeating Characters   
 אם אתה גמור מעבודה: במקום לפתור מלא, תעשה רק “walkthrough” + כתיבת skeleton.
 
 ### יום ה׳ 19.03.2026 – Observability: Prometheus/Grafana + תחקור (רק אחרי 20:00)
 **20:00–20:10** – חימום  
 - 5 דקות להסביר לעצמך: “logs vs metrics vs traces” (תכין ניסוח). אפשר להישען על מושגי traces/קורלציה בעולמות telemetry.   
 
-**20:10–21:10** – Prometheus Foundations (60 דק׳)  
-- Jobs/instances: label `job` ו‑`instance` מצורפים אוטומטית בזמן scrape.   
-- PromQL basics (instant/range query).   
+ב-**20:10–21:10** – Prometheus Foundations (60 דק׳)  
+- ה- Jobs/instances: label `job` ו‑`instance` מצורפים אוטומטית בזמן scrape.   
+- ה- PromQL basics (instant/range query).   
 משימה: כתוב במחברת 6 שאילתות PromQL “אינטואיטיביות” (לדוגמה: rate, error ratio, latency p95 אם קיים היסטוגרמה).
 
 **21:10–21:20** – הפסקה
 
-**21:20–22:10** – Alerting mindset (50 דק׳)  
-- Prometheus alerting rules: מגדירים תנאי alert על בסיס expression.   
-- Grafana alert rules: “מרכז” מערכת ההתראות, עם queries/expressions ותדירות הערכה.   
+ב-**21:20–22:10** – Alerting mindset (50 דק׳)  
+- ה-Prometheus alerting rules: מגדירים תנאי alert על בסיס expression.   
+- ה-Grafana alert rules: “מרכז” מערכת ההתראות, עם queries/expressions ותדירות הערכה.   
 משימה: תכנן alert אחד “עמיד”: error rate גבוה + “for 5m” (בעיקרון) + handling של “no data”.
 
 **22:10–22:20** – הפסקה
 
-**22:20–23:00** – Debugging scenario + LeetCode Medium  
+ב-**22:20–23:00** – Debugging scenario + LeetCode Medium  
 - תרחיש דיבאגינג קצר (תחקור target down): מה אתה בודק בצד Prometheus (targets, networking, service discovery) ומה בצד ה‑app. השתמש במודל של Node Exporter כמשל ל‑exporter.   
 **LeetCode Medium:** Search in Rotated Sorted Array 
 
