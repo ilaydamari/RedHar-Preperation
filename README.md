@@ -1,4 +1,42 @@
+# 🚀 Red Hat – Konflux Cloud Infrastructure Interview Preparation
 
+![RedHat](https://img.shields.io/badge/RedHat-Konflux-red)
+![DevOps](https://img.shields.io/badge/Focus-DevOps-blue)
+![Kubernetes](https://img.shields.io/badge/Stack-Kubernetes-326ce5)
+![Terraform](https://img.shields.io/badge/IaC-Terraform-7b42bc)
+![Go](https://img.shields.io/badge/Language-Go-00ADD8)
+
+<div dir="rtl">
+
+## 📘 מדריך הכנה לראיון – Red Hat (Konflux Infrastructure)
+
+מסמך זה מרכז תוכנית הכנה אינטנסיבית לראיון טכני לתפקיד **Cloud Infrastructure & Monitoring – Konflux Team**.  
+המסמך מבוסס על דרישות המשרה והניסיון של מועמדים בתהליכי גיוס דומים.
+
+ה‑README מותאם במיוחד ל‑GitHub כך:
+
+- עברית קריאה מימין לשמאל
+- קטעי קוד באנגלית נשמרים תקינים
+- ניווט מהיר בין חלקי המסמך
+- מתאים גם כ‑Knowledge Base אישי לראיונות DevOps
+
+---
+
+## 📑 תוכן עניינים
+
+- תקציר מנהלים
+- מיפוי דרישות התפקיד
+- ארכיטקטורת Konflux ו‑CI/CD
+- תוכנית לימוד יומית עד הראיון
+- תרגול LeetCode
+- DevOps Cheat Sheets
+- Playbooks לדיבאגינג
+- סימולציית ראיון
+- שאלות למראיינים
+
+---
+
+﻿
 # תוכנית הכנה אינטנסיבית לראיון טכני ב־Red Hat: Cloud Infrastructure & Monitoring (Konflux) – שישה ימים עד הראיון ביום שני בבוקר
 
 **תקציר קצר:** הכנה ממוקדת לראיון טכני של 45 דקות — המסמך שומר את כל הטקסט והקוד במלואם; שיניתי רק מבנה ותוכן עניינים לשיפור הקריאות ב‑GitHub.
@@ -1028,3 +1066,6 @@ var _ = Describe("Add", func() {
 
 
 
+
+
+</div>
